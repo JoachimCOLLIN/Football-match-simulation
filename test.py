@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-os.chdir('/Users/colli/OneDrive/Bureau/D_C-main/Python')
+
 import Functions as funcs
 
 Match_Data = funcs.LoadData("01/08/18")

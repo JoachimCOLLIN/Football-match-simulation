@@ -1,0 +1,24 @@
+.card_headtitle{
+    background-color:#F44336    !important;
+    height:50%
+  }
+  .d{
+    margin-top: 30px;
+  }
+  .headtitle{
+    text-decoration: underline;
+    margin-top: 15px;
+    color: white;
+    font-size:170%;
+
+
+  }
+  .matchs{
+    margin-bottom: 35px;  
+    background-color:Silver !important;
+    height:50%;
+  }
+  .matchtitle{
+    color:black;
+    font-size: 150%;
+  }

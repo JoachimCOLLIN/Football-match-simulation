@@ -7,31 +7,8 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'exams',
   templateUrl: './matchs.component.html',
-  styles: [`
+  styleUrls: ['./matchs.component.css']
 
-  .card_headtitle{
-    background-color: gainsboro !important;
-    height:50%
-  }
-  .d{
-    margin-top: 30px;
-  }
-  .headtitle{
-    margin-top: 15px;
-    color: rgb(5, 5, 5);
-    font-size:170%;
-
-
-  }
-  .matchs{
-    margin-bottom: 20px;  
-    background-color:Silver !important;
-  }
-  .matchtitle{
-    color:black;
-    font-size: 150%;
-  }
-`]
 })
 
 export class MatchComponent implements OnInit

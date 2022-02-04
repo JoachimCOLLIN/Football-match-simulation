@@ -6,16 +6,14 @@ from .entities.season_end import SeasonEnd, SeasonEndSchema
 blueprint = flask.Blueprint('seasonends', __name__)
 
 @blueprint.route('/seasonends',methods = ['Get'])
-
-def get_the_end_of_the_season():
+def getEndSeason():
     session = get_session()
     seasonEnd_objects = session.query(SeasonEnd).all()
-
+    print(seasonEnd_objects)
     schema = SeasonEndSchema(many=True)
-    seasonEnds = schema.dump(seasonEnd_objects)
-
+    seasonEnd = schema.dump(seasonEnd_objects)
     session.close()
-    return flask.jsonify(seasonEnds)
+    return flask.jsonify(seasonEnd)
 
 
 

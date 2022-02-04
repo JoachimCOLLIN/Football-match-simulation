@@ -4,7 +4,7 @@ from ssl import SSL_ERROR_SSL
 import flask
 import flask_cors
 
-from backend.src import seasonends
+from . import seasonends
 
 from .entities.match import Match
 
@@ -59,13 +59,13 @@ def create_app(test_config=None):
         #     )
         #     session.add(new_match)
 
-        # new_endSeason = SeasonEnd(Team="Manchester",Points=80,Wins=15,Draws=10,Losses=13,Goals_scored=85,Goals_conceded=65)
-        # session.add(new_endSeason)
-        # new_endSeason2 = SeasonEnd(Team="Arsenal",Points=86,Wins=17,Draws=10,Losses=11,Goals_scored=90,Goals_conceded=65)
-        # session.add(new_endSeason2)
-        # session.commit()
+        new_endSeason = SeasonEnd(Team="Manchester",Points=80,Wins=15,Draws=10,Losses=13,Goals_scored=85,Goals_conceded=65)
+        session.add(new_endSeason)
+        new_endSeason2 = SeasonEnd(Team="Arsenal",Points=86,Wins=17,Draws=10,Losses=11,Goals_scored=90,Goals_conceded=65)
+        session.add(new_endSeason2)
+        session.commit()
         session.close()
-        print(1)
+
 
     app.register_blueprint(matchs.blueprint)
     app.register_blueprint(seasonends.blueprint)

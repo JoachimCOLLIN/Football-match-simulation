@@ -12,7 +12,7 @@ export class EndSeasonApiService
     getEndSeason()
     {
         return this.http
-            .get<EndSeason[]>(`${API_URL}/endseason`)
+            .get<EndSeason[]>(`${API_URL}/seasonends`)
     }
 
 }

@@ -11,6 +11,7 @@ import json
 import datetime
 from collections import defaultdict
 from scipy.stats import poisson
+import matplotlib.pyplot as plt
 
 def NMod(Vector,n=1):
     # Takes vector and returns n*mod
@@ -502,7 +503,7 @@ def Prob(PMatrix, HomeTeam, AwayTeam):
     HW = np.sum(PMatrix) - Draw - AW
     return HomeTeam + ': ' + str(HW) + ' Draw: ' + str(Draw) + ' ' + AwayTeam + ': ' + str(AW)
 
-def simulate_one_season(Teams, Parameters, gamma, rho,Max = 10,RealMadridAttackChange=0, RealMadridDefenceChange = 0):
+def simulate_one_season(Teams, Parameters, gamma, rho,Max = 10):
 
     # Update result data in dicts - faster than updating a DataFrame.
     points = defaultdict(int)
@@ -521,7 +522,7 @@ def simulate_one_season(Teams, Parameters, gamma, rho,Max = 10,RealMadridAttackC
             games_played += 1
                 
             
-            GameResult = SimulateMatch(home_team, away_team, Parameters, gamma, rho, Teams,Max,RealMadridAttackChange, RealMadridDefenceChange)
+            GameResult = SimulateMatch(home_team, away_team, Parameters, gamma, rho, Teams,Max)
             home_goals = GameResult[0]
             away_goals = GameResult[1]
             
@@ -550,7 +551,7 @@ def simulate_one_season(Teams, Parameters, gamma, rho,Max = 10,RealMadridAttackC
     # Return the table as a DataFrame (needs to be sorted on points and goal diff).
     
     # Build the empty table
-    empty_rows = np.zeros((20,7), dtype=int)
+    empty_rows = np.zeros((len(Teams),7), dtype=int)
     season_table_values = pd.DataFrame(empty_rows, columns=['points', 'wins', 'draws', 'losses', 'goals for', 'goals against', 'goal diff'])
     season_table_teams = pd.DataFrame(Teams,columns=['team'])
     season_table = pd.concat([season_table_teams, season_table_values], axis=1)
@@ -562,12 +563,10 @@ def simulate_one_season(Teams, Parameters, gamma, rho,Max = 10,RealMadridAttackC
 
     # Calculate the goal diff.
     season_table.loc[:, 'goal diff']= season_table.loc[:, 'goals for'] - season_table.loc[:, 'goals against']
-
+    
     return season_table.sort_values(['points', 'goal diff'], ascending=[False, False])
 
-
-
-def simulate_n_seasons(Teams, Parameters, gamma, rho, Team1,Team2=None,Max = 10, n=100):
+def simulate_n_seasons(Teams, Parameters, gamma, rho, calendar,Team1,Team2=None,n=100,match_added=None,Max = 10):
     #
     
     team_position=[]
@@ -577,6 +576,7 @@ def simulate_n_seasons(Teams, Parameters, gamma, rho, Team1,Team2=None,Max = 10,
     Wins = []
     Draws = []
     Points = []
+    Name=[]
     
     team_position2=[]
     GoalsFor2 = []
@@ -585,6 +585,7 @@ def simulate_n_seasons(Teams, Parameters, gamma, rho, Team1,Team2=None,Max = 10,
     Wins2 = []
     Draws2 = []
     Points2 = []
+    Name2=[]
       
     for i in range(n):
         
@@ -600,6 +601,7 @@ def simulate_n_seasons(Teams, Parameters, gamma, rho, Team1,Team2=None,Max = 10,
         Draws +=[ season_table['draws'][index_team]]
         Wins += [season_table['wins'][index_team]]
         Points +=[season_table['points'][index_team]]
+        Name+=[str(Team1)]
         
         if Team2!= None:
            rank_team2=int(np.where(season_table['team']==str(Team2))[0])
@@ -613,27 +615,35 @@ def simulate_n_seasons(Teams, Parameters, gamma, rho, Team1,Team2=None,Max = 10,
            Draws2 +=[ season_table['draws'][index_team2]]
            Wins2 += [season_table['wins'][index_team2]]
            Points2 +=[season_table['points'][index_team2]] 
+           Name2+=[str(Team2)]
         
     
-    recap_team1=pd.DataFrame(list(zip(team_position,Points,Wins,Draws,Losses,GoalsFor,GoalsAgainst)), columns = ['Classement','Points','Victoire','Nul','Défaite','Buts marqués','Buts encaissés'])
-    recap_team2=pd.DataFrame(list(zip(team_position2,Points2,Wins2,Draws2,Losses2,GoalsFor2,GoalsAgainst2)), columns = ['Classement','Points','Victoire','Nul','Défaite','Buts marqués','Buts encaissés'])
+    recap_team1=pd.DataFrame(list(zip(team_position,Points,Wins,Draws,Losses,GoalsFor,GoalsAgainst,Name)), columns = ['Classement','Points','Victoire','Nul','Défaite','Buts marqués','Buts encaissés','Nom'])
+    recap_team2=pd.DataFrame(list(zip(team_position2,Points2,Wins2,Draws2,Losses2,GoalsFor2,GoalsAgainst2,Name2)), columns = ['Classement','Points','Victoire','Nul','Défaite','Buts marqués','Buts encaissés','Nom'])
     return recap_team1,recap_team2
 
 def probabilites(recap_team):
     lenght=len(recap_team)
-    vector_proba=[0 for k in range(20)]
+    ranking_proba=[]
+    proba_vector=[0 for k in range(20)]
     proba_3lastplace=0
     proba_4firstplace=0
     
     for k in range(lenght):
+        
         ranking=recap_team.iloc[k,0]
-        vector_proba[ranking-1]+=1/lenght
+        ranking_proba+=[ranking]
+        proba_vector[ranking-1]+=1/lenght
         if ranking>17:
             proba_3lastplace+=1/lenght
         if ranking<5:
             proba_4firstplace+=1/lenght
+    """plt.hist(ranking_proba, range = (1,(recap_team['Victoire'][0]+recap_team['Nuls'][0]+recap_team['Défaite'][0])/2), color = 'blue',edgecolor = 'red')
+    plt.xlabel('Classement')
+    plt.ylabel('Probabilités')
+    plt.title('Probabilité de classement à la fin du championnat')"""
         
-    return vector_proba,proba_3lastplace,proba_4firstplace
+    return np.array(proba_vector),proba_3lastplace,proba_4firstplace
 
 
 def probabiliteteamvsteam(recap_team1,recap_team2):
@@ -650,13 +660,96 @@ def probabiliteteamvsteam(recap_team1,recap_team2):
         return proba1above2
     else:
         return None
-import time
 
+def simulate_end_season(Teams, Parameters, gamma, rho, calendar,match_added=None,Max=10):
+    #match_added de la forme dataframe avec colonnes teamH, teamA, Fthg,Ftag
+    
+    points = defaultdict(int)
+    wins = defaultdict(int)
+    draws = defaultdict(int)
+    losses = defaultdict(int)
+    goals_for = defaultdict(int)
+    goals_against = defaultdict(int)
+    
+    for home_team in Teams:
+        for away_team in Teams:
+            if home_team==away_team:
+                pass
+            
+            describe_match=calendar
+            if match_added!= None:
+                if home_team==match_added['teamH'] and away_team==match_added['teamA']:
+                    home_goals=match_added['Fthg']
+                    away_goals=match_added['Ftag']
+            
+            elif (describe_match['status']=='POSTPONED' or describe_match['status']=='SCHEDULED' or describe_match['status']=='CANCELED'):
+                GameResult = SimulateMatch(home_team, away_team, Parameters, gamma, rho, Teams,Max)
+                home_goals = GameResult[0]
+                away_goals = GameResult[1]
+                
+                # Update the points and win/draw/loss statistics.
+                
+            else:
+                home_goals=describe_match['Home Goals']
+                away_goals=describe_match['Away Goals']
+                
+            if home_goals > away_goals:
+                    points[home_team] += 3
+                    wins[home_team] += 1
+                    losses[away_team] += 1
+            elif home_goals == away_goals:
+                    points[home_team] += 1
+                    points[away_team] += 1
+                    draws[home_team] += 1
+                    draws[away_team] += 1
+            else: 
+                    points[away_team] += 3
+                    wins[away_team] += 1
+                    losses[home_team] += 1   
+            goals_for[home_team] += home_goals
+            goals_against[home_team] += away_goals
+             
+            goals_for[away_team] += away_goals
+            goals_against[away_team] += home_goals
+             
+    empty_rows = np.zeros((len(Teams),7), dtype=int)
+    season_table_values = pd.DataFrame(empty_rows, columns=['points', 'wins', 'draws', 'losses', 'goals for', 'goals against', 'goal diff'])
+    season_table_teams = pd.DataFrame(Teams,columns=['team'])
+    season_table = pd.concat([season_table_teams, season_table_values], axis=1)
+    
+    # Fill in the table
+    for team in Teams:
+        values_list = [points[team], wins[team], draws[team], losses[team], goals_for[team], goals_against[team]]
+        season_table.loc[season_table.team == team, ['points', 'wins', 'draws', 'losses', 'goals for', 'goals against']] = values_list
+
+    # Calculate the goal diff.
+    season_table.loc[:, 'goal diff']= season_table.loc[:, 'goals for'] - season_table.loc[:, 'goals against']
+    
+    return season_table.sort_values(['points', 'goal diff'], ascending=[False, False])
+   
+
+    
+def importance_match_victory(Teams, Parameters, gamma, rho, calendar,match_addedH,match_addedA,n=10000):
+    """ le match added home correspond à la victoire de l'équipe à domicile tandis que le match added A correspond à la victoire de l'équipe à l'extérieur"""
+    recap_with_match=simulate_n_seasons(Teams, Parameters, gamma, rho, calendar, n, match_addedH['teamH'],match_addedH)
+    recap_without_match=simulate_n_seasons(Teams, Parameters, gamma, rho, calendar, n, match_addedA['teamH'],match_addedA)
+    
+    
+    ranking_proba_match,proba_3lastplace_match,proba_4firstplace_match=probabilites(recap_with_match)
+    ranking_proba,proba_3lastplace,proba_4firstplace=probabilites(recap_without_match)
+    
+    ranking_difference=ranking_proba_match-ranking_proba
+    proba_4firstdifference=proba_4firstplace_match-proba_4firstplace
+    proba_3lastdifference= proba_3lastplace_match-proba_3lastplace
+    
+    return ranking_difference,proba_3lastdifference,proba_4firstdifference
+    
+import time
+import matplotlib.pyplot as plt
 Match_Data = LoadData("01/08/18")
 
 Teams = sorted(list(set(Match_Data['HomeTeam'])))
 Res = Optimise2(Match_Data, Teams)
-
 
 
 
@@ -667,3 +760,13 @@ elapsed = time.time() - t
 proba,probalast,probafirst=probabilites(df1)
 pbteam1=probabiliteteamvsteam(df,df1)
 proba1,probalast1,probafirst1=probabilites(df)
+
+def histogramme(recap_team,Team):
+    
+    fig, ax = plt.subplots(figsize=(4,1.7))
+
+    
+    ax.hist(recap_team["Classement"], bins=np.arange(0,20)+0.5, ec="k")
+    plt.xlabel('classement ')
+    plt.ylabel('Probabilités')
+    plt.title('Simulation du classement '+str(Team))

@@ -662,7 +662,7 @@ Res = Optimise2(Match_Data, Teams)
 
 
 t = time.time()
-df,df1 = simulate_n_seasons(Teams, Res, Res['Gamma'][0],  Res['Rho'][0], 'Valencia','Alaves',n=10000)
+df,df1 = simulate_n_seasons(Teams, Res, Res['Gamma'][0],  Res['Rho'][0], 'Valencia','Alaves',n=100)
 elapsed = time.time() - t
 proba,probalast,probafirst=probabilites(df1)
 pbteam1=probabiliteteamvsteam(df,df1)

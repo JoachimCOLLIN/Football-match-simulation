@@ -16,6 +16,7 @@ import {MatchComponent} from './matches/matchs.component';
 import { TeamsComponent } from './teams/teams.component';
 
 import {Component, ViewEncapsulation} from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
   ],
     providers: [
         MatchsApiService,
+        DatePipe
         ],
     bootstrap: [AppComponent]
 })

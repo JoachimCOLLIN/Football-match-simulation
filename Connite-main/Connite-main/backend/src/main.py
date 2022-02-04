@@ -46,17 +46,16 @@ def create_app(test_config=None):
                 homeTeam = match["homeTeam"]["name"],
                 awayTeam = match["awayTeam"]["name"],
                 Season = match["season"]["endDate"] ,
-                Date =  match["utcDate"],
+                Date =  match["utcDate"][0:10],
                 Status = match["status"],
                 Winner = match["score"]["winner"],
                 Goal_Away = match["score"]["fullTime"]["awayTeam"],
                 Goal_Home = match["score"]["fullTime"]["homeTeam"],
+                Time =  match["utcDate"][11:16]
             )
             session.add(new_match)
 
-
         session.commit()
-        print(1)
         session.close()
 
     app.register_blueprint(matchs.blueprint)

@@ -2,21 +2,11 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {Match} from './match.model';
 import {MatchsApiService} from './matchs-api.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'exams',
-  template: `
-    <mat-card class="card_headtitle"><h2 class="headtitle"><strong>Today's matches</strong></h2></mat-card>
-    <div class="d">
-      <mat-card *ngFor="let match of matchList" class="mat-elevation-z5" class = "matchs" > 
-        <mat-card-content >
-          <mat-card-title class="matchtitle">{{match.Home}} vs {{match.Away}}</mat-card-title>
-          <button mat-raised-button color="warn" >See more!</button>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  
-  `,
+  templateUrl: './matchs.component.html',
   styles: [`
 
   .card_headtitle{
@@ -48,18 +38,20 @@ export class MatchComponent implements OnInit
 {
     matchListSub: Subscription;
     matchList: Match[];
+    todayDate : string;
 
-    constructor(private examsApi: MatchsApiService)
+    constructor(private matchsApi: MatchsApiService,    private datepipe : DatePipe,)
     {
-      this.matchList = [{Home : "Marseilles",Away : "Paris"},{Home:"Toulouse", Away:"Lyon"}]
-
-
-
+      this.todayDate =this.datepipe.transform((new Date), 'yyyy-MM-dd');
     }
 
     ngOnInit()
     {
-
+      this.matchListSub = this.matchsApi
+            .getMachtes(this.todayDate)
+            .subscribe(result => 
+              {console.log(result),this.matchList = result;}, console.error);
+      const self = this;
     }
 
 

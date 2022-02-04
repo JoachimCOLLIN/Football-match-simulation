@@ -9,11 +9,7 @@ export class MatchsApiService
     constructor(private http: HttpClient)
     {}
 
-    private static handleError(err: HttpErrorResponse | any)
-    {
-    }
-
-    getMachts(date:Date)
+    getMachtes(date:String)
     {
         return this.http
             .get<Match[]>(`${API_URL}/matchs/${date}`)

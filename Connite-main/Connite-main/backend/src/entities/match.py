@@ -15,9 +15,10 @@ class Match(Base):
     Winner = sqlalchemy.Column(sqlalchemy.String)
     Goal_Away = sqlalchemy.Column(sqlalchemy.Integer)
     Goal_Home = sqlalchemy.Column(sqlalchemy.Integer)
+    Time = sqlalchemy.Column(sqlalchemy.String)
 
 
-    def __init__(self, homeTeam, awayTeam, Season, Date, Status, Winner, Goal_Away, Goal_Home):
+    def __init__(self, homeTeam, awayTeam, Season, Date, Status, Winner, Goal_Away, Goal_Home, Time):
         self.homeTeam = homeTeam
         self.awayTeam = awayTeam
         self.Season = Season
@@ -26,6 +27,7 @@ class Match(Base):
         self.Winner = Winner
         self.Goal_Away = Goal_Away
         self.Goal_Home = Goal_Home
+        self.Time = Time
     
 
 
@@ -39,3 +41,4 @@ class MatchSchema(marshmallow.Schema):
     Winner = marshmallow.fields.Str()
     Goal_Away = marshmallow.fields.Number()
     Goal_Home = marshmallow.fields.Number()
+    Time = marshmallow.fields.Str()

@@ -13,10 +13,11 @@ import {AppComponent} from './app.component';
 import {AboutComponent} from './about.component';
 import {MatchsApiService} from './matches/matchs-api.service';
 import {MatchComponent} from './matches/matchs.component';
-import { TeamsComponent } from './teams/teams.component';
+import { EndSeasonComponent } from './endseason/endseason.component';
 
 import {Component, ViewEncapsulation} from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { EndSeasonApiService } from './endseason/endseason-api.service';
 
 
 
@@ -24,7 +25,7 @@ import { DatePipe } from '@angular/common';
 const appRoutes: Routes = [
     {path: '', component: MatchComponent},
     {path: 'about', component: AboutComponent},
-    {path: 'teams',component: TeamsComponent},
+    {path: 'teams',component: EndSeasonComponent},
 ];
 
 
@@ -33,7 +34,7 @@ const appRoutes: Routes = [
       AppComponent,
       MatchComponent,
       AboutComponent,
-      TeamsComponent,
+      EndSeasonComponent,
   ],
   imports: [
       BrowserModule,
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
   ],
     providers: [
         MatchsApiService,
-        DatePipe
+        DatePipe,
+        EndSeasonApiService,
         ],
     bootstrap: [AppComponent]
 })

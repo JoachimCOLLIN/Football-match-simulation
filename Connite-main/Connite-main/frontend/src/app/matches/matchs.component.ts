@@ -27,7 +27,7 @@ export class MatchComponent implements OnInit
       this.matchListSub = this.matchsApi
             .getMachtes(this.todayDate)
             .subscribe(result => 
-              {console.log(result),this.matchList = result;}, console.error);
+              {this.matchList = result;}, console.error);
       const self = this;
     }
 

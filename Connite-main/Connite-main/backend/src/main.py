@@ -1,23 +1,34 @@
+from ast import Import
 import os
 from ssl import SSL_ERROR_SSL
 
 import flask
 import flask_cors
-from sqlalchemy import all_
 
-from . import seasonends
 
-from .entities.match import Match
-from .data_end_season import final_ranking
+
+
 from . import db
 from . import matchs
-from .entities.base import Base
-from .data import response 
-from .entities.season_end import SeasonEnd
 from . import seasonends
-from .entities.ranking import Ranking
-from .data_ranking import team_all_rankings
 from . import rankings
+from . import seasonends
+from . import objectives
+from . import calculs
+
+
+from .entities.base import Base
+from .entities.match import Match
+from .entities.season_end import SeasonEnd
+from .entities.ranking import Ranking
+from .entities.objective import Objective
+from .entities.cacul import Calcul
+
+from .data import response 
+from .data_ranking import team_all_rankings
+from .data_end_season import final_ranking
+from .data_objective import obj
+from .data_calcul import calculations
 
 def create_app(test_config=None):
 
@@ -50,6 +61,8 @@ def create_app(test_config=None):
         session.query(SeasonEnd).delete()
         session.query(Match).delete()
         session.query(Ranking).delete()
+        session.query(Objective).delete()
+        session.query(Calcul).delete()
         session.commit()
         for match in response["matches"]:
             new_match = Match(
@@ -82,12 +95,23 @@ def create_app(test_config=None):
             Nineteen=all_rankings["Nineteen"], Twenty= all_rankings["Twenty"])
             session.add(new_all_rankings)
         session.commit()
+
+        for team in obj:
+            new_objectif = Objective(Team = team, Top= obj[team])
+            session.add(new_objectif)
+        session.commit()
+
+        for team in calculations:
+            new_calcul = Calcul(Team = team["Team"],Odds = team["Odds"], Importance=team["Importance"] )
+            session.add(new_calcul)
+        session.commit()
         session.close()
 
 
     app.register_blueprint(matchs.blueprint)
     app.register_blueprint(seasonends.blueprint)
     app.register_blueprint(rankings.blueprint)
-
+    app.register_blueprint(objectives.blueprint)
+    app.register_blueprint(calculs.blueprint)
 
     return app

@@ -1,8 +1,8 @@
-<mat-card >
+<mat-card class="headtitle">
     <h2>Predicting this season's Winner</h2>
 </mat-card>
 
-<table mat-table [dataSource]= "endSeasonList" class="mat-elevation-z8">
+<table mat-table [dataSource]= "endSeasonList" class="mat-elevation-z8" class="classement">
 
     <ng-container matColumnDef="Rank">
       <th mat-header-cell *matHeaderCellDef class="colonne_title"> Rank </th>
@@ -56,6 +56,3 @@
    </table>
 
 
-<!-- <div style="width: 600px; height:600px;">
-    <canvas id="myChart"></canvas>
-</div> -->

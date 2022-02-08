@@ -3,6 +3,10 @@
     text-decoration: underline;
 }
 
+.card_headtitle{
+    background-color: wheat;
+}
+
 .out_diagram{
     margin-top: 5vh;
     text-align: center;

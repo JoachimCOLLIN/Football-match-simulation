@@ -22,6 +22,7 @@ import { MatchdataComponent } from './matchdata/matchdata.component';
 import { MatTableModule } from '@angular/material/table';
 import { StatComponent } from './stat/stat.component' 
 import { StatApiService } from './stat/stat-api.service'; 
+import { DataApiService } from './matchdata/matchdata-api.service';
 
 
 
@@ -60,7 +61,8 @@ const appRoutes: Routes = [
         MatchsApiService,
         DatePipe,
         EndSeasonApiService,
-        StatApiService
+        StatApiService,
+        DataApiService
         ],
     bootstrap: [AppComponent]
 })

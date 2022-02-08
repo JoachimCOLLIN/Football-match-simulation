@@ -9,7 +9,7 @@ import {API_URL} from './env';
   template: `
     <mat-toolbar color = "primary" class="mat-elevation-z10">
       <button mat-button routerLink="/">Matches</button>
-      <button mat-button routerLink="/teams"> End of season </button>
+      <button mat-button routerLink="/endSeasonPrediction"> End of season </button>
       <button mat-button routerLink="/about"> About us!</button>
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>

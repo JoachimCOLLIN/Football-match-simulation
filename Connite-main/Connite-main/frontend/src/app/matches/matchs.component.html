@@ -1,9 +1,11 @@
-<mat-card class="card_headtitle"><h2 class="headtitle"><strong>Maches today:</strong></h2></mat-card>
+<mat-card class="card_headtitle">
+  <h2 class="headtitle">Maches today:</h2>
+</mat-card>
 <div class="d">
   <mat-card *ngFor="let match of matchList" class="mat-elevation-z5" class = "matchs" > 
     <mat-card-content >
       <mat-card-title class="matchtitle">{{match.homeTeam}} vs {{match.awayTeam}}</mat-card-title>
-      <button mat-raised-button color="warn" >See more!</button>
+      <button mat-raised-button [routerLink] = "['/match',match.homeTeam,match.awayTeam]" class="button">See more!</button>
     </mat-card-content>
   </mat-card>
 </div>

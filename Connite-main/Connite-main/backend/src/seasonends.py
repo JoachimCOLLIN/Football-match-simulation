@@ -9,7 +9,6 @@ blueprint = flask.Blueprint('seasonends', __name__)
 def getEndSeason():
     session = get_session()
     seasonEnd_objects = session.query(SeasonEnd).all()
-    print(seasonEnd_objects)
     schema = SeasonEndSchema(many=True)
     seasonEnd = schema.dump(seasonEnd_objects)
     session.close()

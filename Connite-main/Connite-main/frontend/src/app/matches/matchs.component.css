@@ -1,6 +1,6 @@
 .card_headtitle{
-    background-color:#F44336  !important;
-    height:50%
+    background-color:wheat  !important;
+    height:75%
   }
   .d{
     margin-top: 30px;
@@ -8,16 +8,21 @@
   .headtitle{
     text-decoration: underline;
     margin-top: 15px;
-    color: white;
+    color: black;
     font-size:170%;
+    font-weight: bold;
 
   }
   .matchs{
     margin-bottom: 35px;  
-    background-color:Silver !important;
+    background-color:beige !important;
     height:50%;
   }
   .matchtitle{
     color:black;
     font-size: 150%;
+  }
+  .button{
+    background-color: black;
+    color: white;
   }

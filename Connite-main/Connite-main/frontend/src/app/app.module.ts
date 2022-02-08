@@ -18,6 +18,10 @@ import { EndSeasonComponent } from './endseason/endseason.component';
 import {Component, ViewEncapsulation} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { EndSeasonApiService } from './endseason/endseason-api.service';
+import { MatchdataComponent } from './matchdata/matchdata.component';
+import { MatTableModule } from '@angular/material/table';
+import { StatComponent } from './stat/stat.component' 
+import { StatApiService } from './stat/stat-api.service'; 
 
 
 
@@ -25,7 +29,9 @@ import { EndSeasonApiService } from './endseason/endseason-api.service';
 const appRoutes: Routes = [
     {path: '', component: MatchComponent},
     {path: 'about', component: AboutComponent},
-    {path: 'teams',component: EndSeasonComponent},
+    {path: 'endSeasonPrediction',component: EndSeasonComponent},
+    {path: 'match/:team1/:team2', component: MatchdataComponent},
+    {path: 'endSeasonPrediction/:team', component: StatComponent}
 ];
 
 
@@ -35,6 +41,8 @@ const appRoutes: Routes = [
       MatchComponent,
       AboutComponent,
       EndSeasonComponent,
+      MatchdataComponent,
+      StatComponent,
   ],
   imports: [
       BrowserModule,
@@ -45,12 +53,14 @@ const appRoutes: Routes = [
       MatButtonModule,
       MatCardModule,
       MatInputModule,
+      MatTableModule,
       
   ],
     providers: [
         MatchsApiService,
         DatePipe,
         EndSeasonApiService,
+        StatApiService
         ],
     bootstrap: [AppComponent]
 })

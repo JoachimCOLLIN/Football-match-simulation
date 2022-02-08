@@ -3,17 +3,21 @@ from ssl import SSL_ERROR_SSL
 
 import flask
 import flask_cors
+from sqlalchemy import all_
 
 from . import seasonends
 
 from .entities.match import Match
-
+from .data_end_season import final_ranking
 from . import db
 from . import matchs
 from .entities.base import Base
 from .data import response 
 from .entities.season_end import SeasonEnd
 from . import seasonends
+from .entities.ranking import Ranking
+from .data_ranking import team_all_rankings
+from . import rankings
 
 def create_app(test_config=None):
 
@@ -44,31 +48,46 @@ def create_app(test_config=None):
     with app.app_context():
         session = db.get_session()  
         session.query(SeasonEnd).delete()
+        session.query(Match).delete()
+        session.query(Ranking).delete()
         session.commit()
-        # for match in response["matches"]:
-        #     new_match = Match(
-        #         homeTeam = match["homeTeam"]["name"],
-        #         awayTeam = match["awayTeam"]["name"],
-        #         Season = match["season"]["endDate"] ,
-        #         Date =  match["utcDate"][0:10],
-        #         Status = match["status"],
-        #         Winner = match["score"]["winner"],
-        #         Goal_Away = match["score"]["fullTime"]["awayTeam"],
-        #         Goal_Home = match["score"]["fullTime"]["homeTeam"],
-        #         Time =  match["utcDate"][11:16]
-        #     )
-        #     session.add(new_match)
+        for match in response["matches"]:
+            new_match = Match(
+                homeTeam = match["homeTeam"]["name"],
+                awayTeam = match["awayTeam"]["name"],
+                Season = match["season"]["endDate"] ,
+                Date =  match["utcDate"][0:10],
+                Status = match["status"],
+                Winner = match["score"]["winner"],
+                Goal_Away = match["score"]["fullTime"]["awayTeam"],
+                Goal_Home = match["score"]["fullTime"]["homeTeam"],
+                Time =  match["utcDate"][11:16]
+            )
+            session.add(new_match)
+        session.commit()
 
-        new_endSeason = SeasonEnd(Team="Manchester",Points=80,Wins=15,Draws=10,Losses=13,Goals_scored=85,Goals_conceded=65)
-        session.add(new_endSeason)
-        new_endSeason2 = SeasonEnd(Team="Arsenal",Points=86,Wins=17,Draws=10,Losses=11,Goals_scored=90,Goals_conceded=65)
-        session.add(new_endSeason2)
+        for rank,team in enumerate(final_ranking):
+            new_team = SeasonEnd(Team=team["Team"],Points=team["Points"],Wins=team["Wins"],
+            Draws=team["Draws"],Losses=team["Losses"],Goals_scored=team["Goals_scored"],
+            Goals_conceded=team["Goals_conceded"],Rank=rank+1)
+
+            session.add(new_team)
+        session.commit()
+
+        for all_rankings in team_all_rankings:
+            new_all_rankings = Ranking(Team = all_rankings["Team"], One=all_rankings["One"] ,Two= all_rankings["Two"],Three=all_rankings["Three"], Four=all_rankings["Four"],
+            Five = all_rankings["Five"], Six = all_rankings["Six"], Seven=all_rankings["Seven"], Eight=all_rankings["Eight"], Nine=all_rankings['Nine'],Ten=all_rankings['Ten'],
+            Eleven=all_rankings["Eleven"], Twelve=all_rankings["Twelve"], Thirteen=all_rankings["Thirteen"], Fourteen=all_rankings["Fourteen"],
+            Fifteen=all_rankings["Fifteen"], Sixteen=all_rankings["Sixteen"], Seventeen=all_rankings["Seventeen"], Eighteen=all_rankings["Eighteen"],
+            Nineteen=all_rankings["Nineteen"], Twenty= all_rankings["Twenty"])
+            session.add(new_all_rankings)
         session.commit()
         session.close()
 
 
     app.register_blueprint(matchs.blueprint)
     app.register_blueprint(seasonends.blueprint)
+    app.register_blueprint(rankings.blueprint)
 
 
     return app

@@ -1,9 +1,11 @@
 .card_headtitle{
     background-color:wheat  !important;
-    height:75%
   }
   .d{
     margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
   }
   .headtitle{
     text-decoration: underline;
@@ -14,7 +16,7 @@
 
   }
   .matchs{
-    margin-bottom: 35px;  
+    margin-bottom: 15px;  
     background-color:beige !important;
     height:50%;
   }

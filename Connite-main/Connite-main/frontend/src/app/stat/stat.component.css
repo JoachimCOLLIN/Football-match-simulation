@@ -4,13 +4,13 @@
 }
 
 .out_diagram{
-    margin-top: 15vh;
+    margin-top: 5vh;
     text-align: center;
 }
 
 .in_diagram{
-    width: 600px;
-    height: 600px;
+    width: 800px;
+    height: 750;
     margin-left: auto;
     margin-right: auto;
 }

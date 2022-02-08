@@ -21,6 +21,6 @@ export class Rankings
         public Seventeen: number,
         public Eighteen : number,
         public Nineteen: number,
-        public Twenty: number,
+        public Twenty: number
     ) {}
 }

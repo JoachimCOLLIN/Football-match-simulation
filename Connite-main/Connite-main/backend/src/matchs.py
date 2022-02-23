@@ -18,7 +18,7 @@ blueprint = flask.Blueprint('matchs', __name__)
 
 def get_today_matchs(date):
     session = get_session()
-    match_objects = session.query(Match).filter(Match.Date == date)
+    match_objects = session.query(Match).filter(Match.Date == a)
 
     schema = MatchSchema(many=True)
     matchs = schema.dump(match_objects)

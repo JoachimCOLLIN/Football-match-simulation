@@ -16,7 +16,6 @@ from . import seasonends
 from . import objectives
 from . import calculs
 
-
 from .entities.base import Base
 from .entities.match import Match
 from .entities.season_end import SeasonEnd

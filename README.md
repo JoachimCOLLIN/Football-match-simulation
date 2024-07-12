@@ -4,4 +4,6 @@ The primary objectives were:
 - To simulate football matches in order to be able to determine the most likely end-of-season ranking given the matchs played.
 - To create and implement a new indicator: the importance of a match, that is to say how important the outcome of a match is for a team with respect to an end-of-season objective.
 
+A website was associated with this project in order to see match predictions, ranking predictions and match importances in real time. 
+
 Our code was based on different GitHub accounts of the Dixon-Coles models.
